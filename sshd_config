@@ -1,0 +1,56 @@
+# SSH daemon configuration for Gradewise-Image
+# Based on Gradescope's sshd_config
+
+Port 22
+Protocol 2
+
+# HostKeys for protocol version 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Privilege Separation
+UsePrivilegeSeparation yes
+
+# Logging
+SyslogFacility AUTH
+LogLevel INFO
+
+# Authentication
+LoginGraceTime 120
+PermitRootLogin yes
+StrictModes yes
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+
+IgnoreRhosts yes
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+
+# X11 Forwarding
+X11Forwarding yes
+X11DisplayOffset 10
+
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+UsePAM yes
+
+# Allow environment variables (for autograder setup)
+PermitUserEnvironment yes
+
+# Force command wrapper (kills container on session exit)
+ForceCommand /usr/local/sbin/ssh_wrapper.sh
+
